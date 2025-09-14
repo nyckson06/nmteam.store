@@ -1,0 +1,213 @@
+<!doctypehtml><html lang="pt-BR"><meta charset="UTF-8"><meta content="width=device-width,initial-scale=1"name="viewport"><title>nyckson.store</title><script type="module">import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+    import { getDatabase, ref, set, onValue, get, remove, update } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDa6B3ZD_rm-CoBjECunyPD38uXNOoV5dU",
+      authDomain: "loja-c0b11.firebaseapp.com",
+      databaseURL: "https://loja-c0b11-default-rtdb.firebaseio.com",
+      projectId: "loja-c0b11",
+      storageBucket: "loja-c0b11.firebasestorage.app",
+      messagingSenderId: "778931385122",
+      appId: "1:778931385122:android:feb91e3f6f1e72fe486b7b"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    // 🔥 manter login salvo
+    setPersistence(auth, browserLocalPersistence);
+    const db = getDatabase(app);
+
+    const productGrid = document.getElementById("productGrid");
+    const adminPanel = document.getElementById("adminPanel");
+    const adminToggle = document.getElementById("adminToggle");
+
+    let currentUser = null;
+    let currentCargo = "visitante";
+
+    function carregarProdutos(categoriaSelecionada = null) {
+      onValue(ref(db, "produtos"), (snapshot) => {
+        productGrid.innerHTML = "";
+        snapshot.forEach(prodSnap => {
+          const produto = prodSnap.val();
+          const id = prodSnap.key;
+
+          if (categoriaSelecionada && produto.categoria !== categoriaSelecionada) return;
+
+          const card = document.createElement("div");
+          card.className = "prod-card";
+          card.innerHTML = `
+            <img src="${produto.imagem}" alt="${produto.nome}" />
+            <div class="prod-info">
+              <h3>${produto.nome}</h3>
+              <p class="preco">R$ ${produto.preco}</p>
+              <a href="${produto.link}" target="_blank" class="btn-comprar">Comprar</a>
+              ${currentCargo === "admin" ? `
+                <div class="admin-controls">
+                  <button onclick="editarProduto('${id}', '${produto.nome}', '${produto.preco}', '${produto.imagem}', '${produto.link}', '${produto.categoria}')">Editar</button>
+                  <button onclick="removerProduto('${id}')">Remover</button>
+                </div>
+              ` : ""}
+            </div>
+          `;
+          productGrid.appendChild(card);
+        });
+      });
+    }
+
+    window.filtrar = (categ) => {
+      carregarProdutos(categ);
+      document.getElementById("listaCategorias").style.display = "none";
+    };
+
+    window.atualizarMenuAuth = () => {
+      const authDiv = document.getElementById("menuAuth");
+      if (!authDiv) return;
+      if (currentUser) {
+        authDiv.innerHTML = `<button onclick="logout()">Sair</button>`;
+      } else {
+        authDiv.innerHTML = `
+          <button onclick="document.getElementById('loginForm').style.display='block'">Login</button>
+          <button onclick="document.getElementById('registerForm').style.display='block'">Cadastro</button>
+        `;
+      }
+    };
+
+    window.login = async () => {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        currentUser = userCredential.user;
+        const snap = await get(ref(db, "users/" + currentUser.uid));
+        if (snap.exists()) currentCargo = snap.val().cargo || "usuário";
+        
+        if (currentCargo === "admin") {
+          adminToggle.style.display = "block";
+        }
+
+        document.getElementById("loginForm").style.display = "none";
+        atualizarMenuAuth();
+      } catch (err) {
+        alert("Erro no login: " + err.message);
+      }
+    };
+
+    window.register = async () => {
+      const nome = document.getElementById("regNome").value;
+      const email = document.getElementById("regEmail").value;
+      const password = document.getElementById("regPassword").value;
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCredential.user.uid;
+        await set(ref(db, "users/" + uid), { nome, email, cargo: "usuário" });
+        alert("Cadastro feito! Agora faça login.");
+        document.getElementById("registerForm").style.display = "none";
+        document.getElementById("loginForm").style.display = "block";
+      } catch (err) {
+        alert("Erro no cadastro: " + err.message);
+      }
+    };
+
+    window.adicionarProduto = async () => {
+      const nome = document.getElementById("nomeProduto").value;
+      const preco = document.getElementById("precoProduto").value;
+      const imagem = document.getElementById("imagemProduto").value;
+      const link = document.getElementById("linkProduto").value;
+      const categoria = document.getElementById("categoriaProduto").value;
+      if (!nome || !preco || !imagem || !link || !categoria) return alert("Preencha todos os campos.");
+      const id = Date.now().toString();
+      await set(ref(db, "produtos/" + id), { nome, preco, imagem, link, categoria });
+      alert("Produto publicado!");
+      limparCampos();
+      carregarProdutos();
+    };
+
+    window.editarProduto = (id, nome, preco, imagem, link, categoria) => {
+      document.getElementById("nomeProduto").value = nome;
+      document.getElementById("precoProduto").value = preco;
+      document.getElementById("imagemProduto").value = imagem;
+      document.getElementById("linkProduto").value = link;
+      document.getElementById("categoriaProduto").value = categoria;
+      document.getElementById("btnAdicionar").style.display = "none";
+      document.getElementById("btnSalvarEdicao").style.display = "inline-block";
+      window.produtoEditando = id;
+      adminPanel.style.display = "block";
+    };
+
+    window.salvarEdicao = async () => {
+      if (!window.produtoEditando) return;
+      const nome = document.getElementById("nomeProduto").value;
+      const preco = document.getElementById("precoProduto").value;
+      const imagem = document.getElementById("imagemProduto").value;
+      const link = document.getElementById("linkProduto").value;
+      const categoria = document.getElementById("categoriaProduto").value;
+      await update(ref(db, "produtos/" + window.produtoEditando), { nome, preco, imagem, link, categoria });
+      alert("Produto atualizado!");
+      window.produtoEditando = null;
+      document.getElementById("btnAdicionar").style.display = "inline-block";
+      document.getElementById("btnSalvarEdicao").style.display = "none";
+      limparCampos();
+      carregarProdutos();
+    };
+
+    window.removerProduto = async (id) => {
+      if (confirm("Tem certeza?")) {
+        await remove(ref(db, "produtos/" + id));
+        alert("Produto removido");
+        carregarProdutos();
+      }
+    };
+
+    function limparCampos() {
+      document.getElementById("nomeProduto").value = "";
+      document.getElementById("precoProduto").value = "";
+      document.getElementById("imagemProduto").value = "";
+      document.getElementById("linkProduto").value = "";
+      document.getElementById("categoriaProduto").value = "";
+    }
+
+    window.logout = async () => {
+      await signOut(auth);
+      currentUser = null;
+      currentCargo = "visitante";
+      adminPanel.style.display = "none";
+      adminToggle.style.display = "none";
+      carregarProdutos();
+      atualizarMenuAuth();
+    };
+
+    document.getElementById("btnToggleAdmin").addEventListener("click", () => {
+      adminPanel.style.display = (adminPanel.style.display === "none" || adminPanel.style.display === "") ? "block" : "none";
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        currentUser = user;
+        const snap = await get(ref(db, "users/" + currentUser.uid));
+        if (snap.exists()) currentCargo = snap.val().cargo || "usuário";
+        if (currentCargo === "admin") {
+          adminToggle.style.display = "block";
+        }
+        atualizarMenuAuth();
+      } else {
+        currentUser = null;
+        currentCargo = "visitante";
+        adminToggle.style.display = "none";
+        atualizarMenuAuth();
+      }
+      carregarProdutos();
+    });</script><style>body{margin:0;font-family:Arial,sans-serif;background:#111;color:#fff;overflow-x:hidden}.titulo{color:red;text-align:center;font-size:42px;font-weight:700;text-shadow:0 0 10px red,0 0 20px #900}.topbar{display:flex;align-items:center;justify-content:center;margin:20px 0;position:relative;z-index:3}#btnCategorias{position:absolute;left:20px;background:red;color:#000;border:none;font-size:22px;padding:6px 12px;border-radius:5px;cursor:pointer;box-shadow:0 0 8px red}#btnCategorias:hover{background:#900;color:#fff}#listaCategorias{display:none;position:absolute;top:70px;left:20px;background:#1a1a1a;border:1px solid red;border-radius:8px;padding:8px;z-index:5}#listaCategorias button{display:block;width:100%;margin:4px 0;background:#222;color:red;border:none;padding:6px 10px;cursor:pointer;text-align:left;border-radius:5px}#listaCategorias button:hover{background:red;color:#000}.container{max-width:1200px;margin:auto;padding:20px;position:relative;z-index:2}.prod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}.prod-card{background:#1e1e1e;border-radius:10px;overflow:hidden;box-shadow:0 0 8px red;display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px;transition:transform .3s,box-shadow .3s;width:220px}.prod-card:hover{transform:scale(1.05);box-shadow:0 0 20px red,0 0 40px #900}.prod-card img{width:200px;height:200px;object-fit:contain;background:#000;border-radius:8px;margin-bottom:10px;display:block}.prod-card:hover img{transform:scale(1.1)}.prod-info{background:#111;padding:10px;width:100%;border-radius:8px}.prod-info h3{margin:0 0 6px;font-size:16px}.preco{color:red;font-weight:700;margin:6px 0;font-size:14px}.btn-comprar{display:inline-block;background:red;color:#000;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:14px}.btn-comprar:hover{background:#900;color:#fff}.admin-controls{margin-top:8px}.admin-controls button{background:#666;border:none;padding:5px 8px;margin:2px;border-radius:4px;cursor:pointer;font-size:12px}.admin-controls button:hover{background:red;color:#fff}#adminPanel{display:none;background:#222;padding:15px;border:1px dashed red;border-radius:10px;margin-top:20px}#adminPanel input,#adminPanel select{width:100%;margin:5px 0;padding:8px;border-radius:5px;border:none}.auth-forms{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#222;padding:20px;border-radius:10px;z-index:1000;width:300px}.auth-forms input{width:100%;margin:8px 0;padding:8px;border:none;border-radius:5px}.auth-forms button{width:100%;padding:10px;background:red;border:none;color:#000;border-radius:5px;cursor:pointer}#adminToggle{display:none;position:fixed;bottom:20px;right:20px;z-index:999}#btnToggleAdmin{background:red;color:#000;font-size:24px;border:none;border-radius:50%;width:50px;height:50px;cursor:pointer;box-shadow:0 0 10px red}#btnToggleAdmin:hover{background:#900;color:#fff}#particles{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0}</style><canvas id="particles"></canvas><div class="topbar"><button id="btnCategorias">☰</button><h1 class="titulo">NmTeam.Store</h1></div><div id="listaCategorias"><button onclick="filtrar(null)">Todos</button> <button onclick='filtrar("Contas Freefire")'>Contas Freefire</button> <button onclick='filtrar("Projetos Cheats")'>Projetos Cheats</button> <button onclick='filtrar("Cheats Freefire")'>Cheats Freefire</button><hr><div id="menuAuth"></div></div><div class="container"><div id="productGrid"class="prod-grid"></div><div id="adminPanel"><h3>Gerenciar Produtos</h3><input id="nomeProduto"placeholder="Nome"> <input id="precoProduto"placeholder="Preço (R$)"> <input id="imagemProduto"placeholder="URL da imagem"> <input id="linkProduto"placeholder="Link de compra"> <select id="categoriaProduto"><option value="">Selecione a categoria<option value="Contas Freefire">Contas Freefire<option value="Projetos Cheats">Projetos Cheats<option value="Cheats Freefire">Cheats Freefire</select> <button onclick="adicionarProduto()"id="btnAdicionar">Adicionar Produto</button> <button onclick="salvarEdicao()"id="btnSalvarEdicao"style="display:none">Salvar Alteração</button></div></div><div id="adminToggle"><button id="btnToggleAdmin">+</button></div><div id="loginForm"class="auth-forms"><h2>Login</h2><input id="loginEmail"placeholder="Email"type="email"> <input id="loginPassword"placeholder="Senha"type="password"> <button onclick="login()">Entrar</button></div><div id="registerForm"class="auth-forms"><h2>Cadastro</h2><input id="regNome"placeholder="Nome"> <input id="regEmail"placeholder="Email"type="email"> <input id="regPassword"placeholder="Senha"type="password"> <button onclick="register()">Registrar</button></div><script>document.getElementById("btnCategorias").addEventListener("click", () => {
+      const lista = document.getElementById("listaCategorias");
+      lista.style.display = lista.style.display === "block" ? "none" : "block";
+    });</script><script>(function() {
+      const canvas=document.getElementById('particles');if(!canvas)return;
+      const ctx=canvas.getContext('2d');
+      function resize(){const dpr=window.devicePixelRatio||1;canvas.width=Math.floor(window.innerWidth*dpr);canvas.height=Math.floor(window.innerHeight*dpr);canvas.style.width=window.innerWidth+'px';canvas.style.height=window.innerHeight+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}window.addEventListener('resize',resize,{passive:true});resize();
+      const CONFIG={count:/Mobi|Android/i.test(navigator.userAgent)?30:60,minSize:1.5,maxSize:4.5,speed:0.2,color1:'rgba(196,0,0,0.95)',color2:'rgba(255,120,0,0.9)',linkLines:true,linkDistance:120};
+      function rand(min,max){return Math.random()*(max-min)+min;}
+      class Particle{constructor(w,h){this.reset(w,h);}reset(w,h){this.x=Math.random()*w;this.y=Math.random()*h;const angle=Math.random()*Math.PI*2,speed=rand(0.2,CONFIG.speed+0.6);this.vx=Math.cos(angle)*speed;this.vy=Math.sin(angle)*speed;this.size=rand(CONFIG.minSize,CONFIG.maxSize);this.color=Math.random()>0.6?CONFIG.color1:CONFIG.color2;this.opacity=rand(0.3,0.95);}update(w,h,mouse){this.x+=this.vx;this.y+=this.vy;if(this.x<-50||this.x>w+50||this.y<-80||this.y>h+50)this.reset(w,h);if(mouse.x){const dx=this.x-mouse.x,dy=this.y-mouse.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<80&&dist>0.1){const f=(80-dist)/80;this.x+=(dx/dist)*f*4;this.y+=(dy/dist)*f*4;}}}draw(ctx){ctx.beginPath();ctx.fillStyle=this.color;ctx.globalAlpha=this.opacity;ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}}
+      let particles=[];function init(){particles=[];const w=canvas.width/(window.devicePixelRatio||1),h=canvas.height/(window.devicePixelRatio||1);for(let i=0;i<CONFIG.count;i++)particles.push(new Particle(w,h));}init();window.addEventListener('resize',init);
+      const mouse={x:null,y:null};window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});window.addEventListener('mouseout',()=>{mouse.x=null;mouse.y=null;});
+      function loop(){const w=canvas.width/(window.devicePixelRatio||1),h=canvas.height/(window.devicePixelRatio||1);ctx.clearRect(0,0,canvas.width,canvas.height);for(const p of particles){p.update(w,h,mouse);p.draw(ctx);}if(CONFIG.linkLines){ctx.lineWidth=0.6;for(let i=0;i<particles.length;i++){for(let j=i+1;j<particles.length;j++){const a=particles[i],b=particles[j],dx=a.x-b.x,dy=a.y-b.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<CONFIG.linkDistance){const alpha=0.6*(1-dist/CONFIG.linkDistance);ctx.strokeStyle=`rgba(196,0,0,${alpha*0.6})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}}}requestAnimationFrame(loop);}loop();
+    })();</script>
