@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>nyckson.store</title>
-
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+<!doctypehtml><html lang="pt-BR"><meta charset="UTF-8"><meta content="width=device-width,initial-scale=1"name="viewport"><title>nyckson.store</title><script type="module">import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getDatabase, ref, set, onValue, get, remove, update } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
 
@@ -23,7 +14,6 @@
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    // 🔥 manter login salvo
     setPersistence(auth, browserLocalPersistence);
     const db = getDatabase(app);
 
@@ -206,164 +196,17 @@
         atualizarMenuAuth();
       }
       carregarProdutos();
-    });
-  </script>
-
-  <!-- CSS -->
-  <style>
-    body { margin:0; font-family: Arial, sans-serif; background:#111; color:#fff; overflow-x:hidden; }
-    .titulo { color:#f00; text-align:center; font-size:42px; font-weight:bold; text-shadow:0 0 10px #f00,0 0 20px #900; }
-    .topbar { display:flex; align-items:center; justify-content:center; margin:20px 0; position:relative; z-index:3; }
-    #btnCategorias { position:absolute; left:20px; background:#f00; color:#000; border:none; font-size:22px; padding:6px 12px; border-radius:5px; cursor:pointer; box-shadow:0 0 8px #f00; }
-    #btnCategorias:hover { background:#900; color:#fff; }
-    #listaCategorias { display:none; position:absolute; top:70px; left:20px; background:#1a1a1a; border:1px solid #f00; border-radius:8px; padding:8px; z-index:5; }
-    #listaCategorias button { display:block; width:100%; margin:4px 0; background:#222; color:#f00; border:none; padding:6px 10px; cursor:pointer; text-align:left; border-radius:5px; }
-    #listaCategorias button:hover { background:#f00; color:#000; }
-    .container { max-width:1200px; margin:auto; padding:20px; position:relative; z-index:2; }
-    .prod-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
-
-    /* Cards ajustados */
-    .prod-card {
-  background:#1e1e1e;
-  border-radius:10px;
-  overflow:hidden;
-  box-shadow:0 0 8px #f00;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  padding:10px;
-  transition: transform 0.3s, box-shadow 0.3s;
-  width:220px;   /* 🔥 força largura fixa */
-}
-
-    .prod-card:hover {
-      transform: scale(1.05);
-      box-shadow:0 0 20px #f00, 0 0 40px #900;
-    }
-   .prod-card img {
-  width:200px;      /* largura fixa */
-  height:200px;     /* altura fixa */
-  object-fit:contain; /* 🔥 mostra a imagem inteira */
-  background:#000;   /* fundo preto preenchendo as sobras */
-  border-radius:8px;
-  margin-bottom:10px;
-  display:block;
-}
-
-
-    .prod-card:hover img {
-      transform: scale(1.1);
-    }
-   .prod-info {
-  background:#111;
-  padding:10px;
-  width:100%;      /* acompanha o quadrado */
-  border-radius:8px;
-}
-    .prod-info h3 { margin:0 0 6px; font-size:16px; }
-    .preco { color:#f00; font-weight:bold; margin:6px 0; font-size:14px; }
-    .btn-comprar { display:inline-block; background:#f00; color:#000; padding:6px 10px; border-radius:5px; text-decoration:none; font-size:14px; }
-    .btn-comprar:hover { background:#900; color:#fff; }
-
-    .admin-controls { margin-top:8px; }
-    .admin-controls button { background:#666; border:none; padding:5px 8px; margin:2px; border-radius:4px; cursor:pointer; font-size:12px; }
-    .admin-controls button:hover { background:#f00; color:#fff; }
-
-    #adminPanel { display:none; background:#222; padding:15px; border:1px dashed #f00; border-radius:10px; margin-top:20px; }
-    #adminPanel input, #adminPanel select { width:100%; margin:5px 0; padding:8px; border-radius:5px; border:none; }
-
-    .auth-forms { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#222; padding:20px; border-radius:10px; z-index:1000; width:300px; }
-    .auth-forms input { width:100%; margin:8px 0; padding:8px; border:none; border-radius:5px; }
-    .auth-forms button { width:100%; padding:10px; background:#f00; border:none; color:#000; border-radius:5px; cursor:pointer; }
-
-    #adminToggle { display:none; position:fixed; bottom:20px; right:20px; z-index:999; }
-    #btnToggleAdmin { background:#f00; color:#000; font-size:24px; border:none; border-radius:50%; width:50px; height:50px; cursor:pointer; box-shadow:0 0 10px #f00; }
-    #btnToggleAdmin:hover { background:#900; color:#fff; }
-
-    #particles { position:fixed; top:0; left:0; width:100vw; height:100vh; pointer-events:none; z-index:0; }
-  </style>
-</head>
-<body>
-  <!-- fundo partículas -->
-  <canvas id="particles"></canvas>
-
-  <div class="topbar">
-    <button id="btnCategorias">☰</button>
-    <h1 class="titulo">NmTeam.Store</h1>
-  </div>
-
-  <div id="listaCategorias">
-    <button onclick="filtrar(null)">Todos</button>
-    <button onclick="filtrar('Contas Freefire')">Contas Freefire</button>
-    <button onclick="filtrar('Projetos Cheats')">Projetos Cheats</button>
-    <button onclick="filtrar('Cheats Freefire')">Cheats Freefire</button>
-    <hr>
-    <div id="menuAuth"></div>
-  </div>
-
-  <div class="container">
-    <div class="prod-grid" id="productGrid"></div>
-
-    <div id="adminPanel">
-      <h3>Gerenciar Produtos</h3>
-      <input type="text" id="nomeProduto" placeholder="Nome">
-      <input type="text" id="precoProduto" placeholder="Preço (R$)">
-      <input type="text" id="imagemProduto" placeholder="URL da imagem">
-      <input type="text" id="linkProduto" placeholder="Link de compra">
-      <select id="categoriaProduto">
-        <option value="">Selecione a categoria</option>
-        <option value="Contas Freefire">Contas Freefire</option>
-        <option value="Projetos Cheats">Projetos Cheats</option>
-        <option value="Cheats Freefire">Cheats Freefire</option>
-      </select>
-      <button id="btnAdicionar" onclick="adicionarProduto()">Adicionar Produto</button>
-      <button id="btnSalvarEdicao" onclick="salvarEdicao()" style="display:none;">Salvar Alteração</button>
-    </div>
-  </div>
-
-  <div id="adminToggle">
-    <button id="btnToggleAdmin">+</button>
-  </div>
-
-  <!-- modais -->
-  <div class="auth-forms" id="loginForm">
-    <h2>Login</h2>
-    <input type="email" id="loginEmail" placeholder="Email">
-    <input type="password" id="loginPassword" placeholder="Senha">
-    <button onclick="login()">Entrar</button>
-  </div>
-
-  <div class="auth-forms" id="registerForm">
-    <h2>Cadastro</h2>
-    <input type="text" id="regNome" placeholder="Nome">
-    <input type="email" id="regEmail" placeholder="Email">
-    <input type="password" id="regPassword" placeholder="Senha">
-    <button onclick="register()">Registrar</button>
-  </div>
-
-  <!-- Script abrir/fechar menu -->
-  <script>
-    document.getElementById("btnCategorias").addEventListener("click", () => {
+    });</script><style>body{margin:0;font-family:Arial,sans-serif;background:#111;color:#fff;overflow-x:hidden}.titulo{color:red;text-align:center;font-size:42px;font-weight:700;text-shadow:0 0 10px red,0 0 20px #900}.topbar{display:flex;align-items:center;justify-content:center;margin:20px 0;position:relative;z-index:3;flex-direction:column}.topbar img{height:80px;margin-bottom:5px}#btnCategorias{position:absolute;left:20px;background:red;color:#000;border:none;font-size:22px;padding:6px 12px;border-radius:5px;cursor:pointer;box-shadow:0 0 8px red}#btnCategorias:hover{background:#900;color:#fff}#listaCategorias{display:none;position:absolute;top:70px;left:20px;background:#1a1a1a;border:1px solid red;border-radius:8px;padding:8px;z-index:5}#listaCategorias button{display:block;width:100%;margin:4px 0;background:#222;color:red;border:none;padding:6px 10px;cursor:pointer;text-align:left;border-radius:5px}#listaCategorias button:hover{background:red;color:#000}.container{max-width:1200px;margin:auto;padding:20px;position:relative;z-index:2}.prod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}.prod-card{background:#1e1e1e;border-radius:10px;overflow:hidden;box-shadow:0 0 8px red;display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px;transition:transform .3s,box-shadow .3s;width:220px}.prod-card:hover{transform:scale(1.05);box-shadow:0 0 20px red,0 0 40px #900}.prod-card img{width:200px;height:200px;object-fit:contain;background:#000;border-radius:8px;margin-bottom:10px;display:block}.prod-card:hover img{transform:scale(1.1)}.prod-info{background:#111;padding:10px;width:100%;border-radius:8px}.prod-info h3{margin:0 0 6px;font-size:16px}.preco{color:red;font-weight:700;margin:6px 0;font-size:14px}.btn-comprar{display:inline-block;background:red;color:#000;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:14px}.btn-comprar:hover{background:#900;color:#fff}.admin-controls{margin-top:8px}.admin-controls button{background:#666;border:none;padding:5px 8px;margin:2px;border-radius:4px;cursor:pointer;font-size:12px}.admin-controls button:hover{background:red;color:#fff}#adminPanel{display:none;background:#222;padding:15px;border:1px dashed red;border-radius:10px;margin-top:20px}#adminPanel input,#adminPanel select{width:100%;margin:5px 0;padding:8px;border-radius:5px;border:none}.auth-forms{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#222;padding:20px;border-radius:10px;z-index:1000;width:300px}.auth-forms input{width:100%;margin:8px 0;padding:8px;border:none;border-radius:5px}.auth-forms button{width:100%;padding:10px;background:red;border:none;color:#000;border-radius:5px;cursor:pointer}#adminToggle{display:none;position:fixed;bottom:20px;right:20px;z-index:999}#btnToggleAdmin{background:red;color:#000;font-size:24px;border:none;border-radius:50%;width:50px;height:50px;cursor:pointer;box-shadow:0 0 10px red}#btnToggleAdmin:hover{background:#900;color:#fff}#particles{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0}footer{position:fixed;bottom:0;left:0;width:100%;background:#111;color:red;text-align:center;padding:10px;font-size:14px;border-top:1px solid red;z-index:1000}</style><canvas id="particles"></canvas><div class="topbar"><button id="btnCategorias">☰</button><div style="text-align:center"><img alt="NM TEAM Logo"src="logo.png"><h1 class="titulo">NmTeam.Store</h1></div></div><div id="listaCategorias"><button onclick="filtrar(null)">Todos</button> <button onclick='filtrar("Contas Freefire")'>Contas Freefire</button> <button onclick='filtrar("Projetos Cheats")'>Projetos Cheats</button> <button onclick='filtrar("Cheats Freefire")'>Cheats Freefire</button><hr><div id="menuAuth"></div></div><div class="container"><div id="productGrid"class="prod-grid"></div><div id="adminPanel"><h3>Gerenciar Produtos</h3><input id="nomeProduto"placeholder="Nome"> <input id="precoProduto"placeholder="Preço (R$)"> <input id="imagemProduto"placeholder="URL da imagem"> <input id="linkProduto"placeholder="Link de compra"> <select id="categoriaProduto"><option value="">Selecione a categoria<option value="Contas Freefire">Contas Freefire<option value="Projetos Cheats">Projetos Cheats<option value="Cheats Freefire">Cheats Freefire</select> <button onclick="adicionarProduto()"id="btnAdicionar">Adicionar Produto</button> <button onclick="salvarEdicao()"id="btnSalvarEdicao"style="display:none">Salvar Alteração</button></div></div><div id="adminToggle"><button id="btnToggleAdmin">+</button></div><div id="loginForm"class="auth-forms"><h2>Login</h2><input id="loginEmail"placeholder="Email"type="email"> <input id="loginPassword"placeholder="Senha"type="password"> <button onclick="login()">Entrar</button></div><div id="registerForm"class="auth-forms"><h2>Cadastro</h2><input id="regNome"placeholder="Nome"> <input id="regEmail"placeholder="Email"type="email"> <input id="regPassword"placeholder="Senha"type="password"> <button onclick="register()">Registrar</button></div><script>document.getElementById("btnCategorias").addEventListener("click", () => {
       const lista = document.getElementById("listaCategorias");
       lista.style.display = lista.style.display === "block" ? "none" : "block";
-    });
-  </script>
-
-  <!-- Script partículas -->
-  <script>
-    (function() {
+    });</script><script>(function() {
       const canvas=document.getElementById('particles');if(!canvas)return;
       const ctx=canvas.getContext('2d');
       function resize(){const dpr=window.devicePixelRatio||1;canvas.width=Math.floor(window.innerWidth*dpr);canvas.height=Math.floor(window.innerHeight*dpr);canvas.style.width=window.innerWidth+'px';canvas.style.height=window.innerHeight+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}window.addEventListener('resize',resize,{passive:true});resize();
-      const CONFIG={count:/Mobi|Android/i.test(navigator.userAgent)?30:60,minSize:1.5,maxSize:4.5,speed:0.2,color1:'rgba(196,0,0,0.95)',color2:'rgba(255,120,0,0.9)',linkLines:true,linkDistance:120};
-      function rand(min,max){return Math.random()*(max-min)+min;}
-      class Particle{constructor(w,h){this.reset(w,h);}reset(w,h){this.x=Math.random()*w;this.y=Math.random()*h;const angle=Math.random()*Math.PI*2,speed=rand(0.2,CONFIG.speed+0.6);this.vx=Math.cos(angle)*speed;this.vy=Math.sin(angle)*speed;this.size=rand(CONFIG.minSize,CONFIG.maxSize);this.color=Math.random()>0.6?CONFIG.color1:CONFIG.color2;this.opacity=rand(0.3,0.95);}update(w,h,mouse){this.x+=this.vx;this.y+=this.vy;if(this.x<-50||this.x>w+50||this.y<-80||this.y>h+50)this.reset(w,h);if(mouse.x){const dx=this.x-mouse.x,dy=this.y-mouse.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<80&&dist>0.1){const f=(80-dist)/80;this.x+=(dx/dist)*f*4;this.y+=(dy/dist)*f*4;}}}draw(ctx){ctx.beginPath();ctx.fillStyle=this.color;ctx.globalAlpha=this.opacity;ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}}
-      let particles=[];function init(){particles=[];const w=canvas.width/(window.devicePixelRatio||1),h=canvas.height/(window.devicePixelRatio||1);for(let i=0;i<CONFIG.count;i++)particles.push(new Particle(w,h));}init();window.addEventListener('resize',init);
-      const mouse={x:null,y:null};window.addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});window.addEventListener('mouseout',()=>{mouse.x=null;mouse.y=null;});
-      function loop(){const w=canvas.width/(window.devicePixelRatio||1),h=canvas.height/(window.devicePixelRatio||1);ctx.clearRect(0,0,canvas.width,canvas.height);for(const p of particles){p.update(w,h,mouse);p.draw(ctx);}if(CONFIG.linkLines){ctx.lineWidth=0.6;for(let i=0;i<particles.length;i++){for(let j=i+1;j<particles.length;j++){const a=particles[i],b=particles[j],dx=a.x-b.x,dy=a.y-b.y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<CONFIG.linkDistance){const alpha=0.6*(1-dist/CONFIG.linkDistance);ctx.strokeStyle=`rgba(196,0,0,${alpha*0.6})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}}}requestAnimationFrame(loop);}loop();
-    })();
-  </script>
-
-</body>
-</html>
+      const CONFIG={count:/Mobi|Android/i.test(navigator.userAgent)?30:60,minSize:1.5,maxSize:4.5,speed:0.3,connectDist:140};
+      const particles=[];for(let i=0;i<CONFIG.count;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()*2-1)*CONFIG.speed,vy:(Math.random()*2-1)*CONFIG.speed,size:CONFIG.minSize+Math.random()*(CONFIG.maxSize-CONFIG.minSize)});}
+      function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let i=0;i<CONFIG.count;i++){const p=particles[i];ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,2*Math.PI);ctx.fillStyle='rgba('+ (200+Math.floor(Math.random()*55))+','+(50+Math.floor(Math.random()*150))+','+(50+Math.floor(Math.random()*150))+',0.7)';ctx.fill();}
+      for(let i=0;i<CONFIG.count;i++){for(let j=i+1;j<CONFIG.count;j++){const a=particles[i],b=particles[j];const dx=a.x-b.x,dy=a.y-b.y;const dist=Math.sqrt(dx*dx+dy*dy);if(dist<CONFIG.connectDist){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(255,0,0,'+(1-dist/CONFIG.connectDist)+')';ctx.stroke();}}}
+      for(let i=0;i<CONFIG.count;i++){const p=particles[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>canvas.width)p.vx*=-1;if(p.y<0||p.y>canvas.height)p.vy*=-1;}}
+      function animate(){draw();requestAnimationFrame(animate);}animate();
+    })();</script><footer>🔒 Selo de Garantia | 🚀Entrega Imediata | 💭Suporte Rápido | © 2025 NmTeam.Store — Todos os direitos reservados.</footer>
