@@ -9,35 +9,113 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
-body{background:#050505;color:#fff;padding-top:80px;padding-bottom:80px;overflow-x:hidden;}
-header{position:fixed;top:0;left:0;width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 25px;background:rgba(0,0,0,.9);border-bottom:1px solid rgba(0,255,255,.25);z-index:1000;}
+body{
+    background:#050505;
+    color:#fff;
+    padding-top:80px;
+    padding-bottom:80px;
+    overflow-x:hidden;
+}
+
+/* HEADER */
+header{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:16px 25px;
+    background:rgba(0,0,0,.9);
+    border-bottom:1px solid rgba(0,255,255,.25);
+    z-index:1000;
+}
 header h1{color:cyan;font-size:22px;}
+
+/* NAV */
 nav{display:flex;}
-nav a{color:#ccc;margin-left:25px;text-decoration:none;font-size:13px;}
+nav a{
+    color:#ccc;
+    margin-left:25px;
+    text-decoration:none;
+    font-size:13px;
+}
 nav a:hover{color:cyan;}
+
+/* HAMBURGER */
 .hamburger{display:none;flex-direction:column;gap:6px;cursor:pointer;}
-.hamburger span{width:26px;height:3px;background:cyan;border-radius:5px;transition:.3s;}
+.hamburger span{
+    width:26px;height:3px;
+    background:cyan;border-radius:5px;transition:.3s;
+}
 .hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
 .hamburger.active span:nth-child(2){opacity:0;}
 .hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
-.hero{padding:80px 25px;text-align:center;background:radial-gradient(circle at top,#0f2027,#000);}
+
+/* HERO */
+.hero{
+    padding:80px 25px;
+    text-align:center;
+    background:radial-gradient(circle at top,#0f2027,#000);
+}
 .hero h2{font-size:36px;color:cyan;margin-bottom:15px;}
 .hero p{max-width:600px;margin:0 auto 30px;font-size:14px;opacity:.85;}
-.hero button{padding:16px 35px;border:none;border-radius:12px;background:linear-gradient(90deg,cyan,#00ff9c);font-weight:700;cursor:pointer;}
+.hero button{
+    padding:16px 35px;border:none;border-radius:12px;
+    background:linear-gradient(90deg,cyan,#00ff9c);
+    font-weight:700;cursor:pointer;
+}
+
+/* SECTIONS */
 section{padding:70px 25px;}
 section h3{color:cyan;font-size:26px;margin-bottom:25px;}
+
+/* GERADOR */
 .generator{max-width:420px;margin:auto;}
-select,button.gen{width:100%;padding:14px;margin-bottom:15px;border-radius:10px;background:#0e0e0e;border:1px solid rgba(0,255,255,.3);color:#fff;}
-button.gen{background:linear-gradient(90deg,cyan,#00ff9c);color:#000;font-weight:700;}
-.result{background:#0b0b0b;padding:15px;border-radius:12px;border:1px solid rgba(0,255,255,.2);}
+select,button.gen{
+    width:100%;padding:14px;margin-bottom:15px;
+    border-radius:10px;background:#0e0e0e;
+    border:1px solid rgba(0,255,255,.3);color:#fff;
+}
+button.gen{
+    background:linear-gradient(90deg,cyan,#00ff9c);
+    color:#000;font-weight:700;
+}
+.result{
+    background:#0b0b0b;padding:15px;border-radius:12px;
+    border:1px solid rgba(0,255,255,.2);
+}
 .result p{font-size:13px;margin:6px 0;}
-.about{max-width:700px;margin:auto;opacity:.85;line-height:1.7;font-size:14px;}
-footer{position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,.85);padding:15px;text-align:center;font-size:12px;border-top:1px solid rgba(0,255,255,.25);}
+
+/* QUEM SOMOS */
+.about{
+    max-width:700px;
+    margin:auto;
+    opacity:.85;
+    line-height:1.7;
+    font-size:14px;
+}
+
+/* FOOTER */
+footer{
+    position:fixed;bottom:0;left:0;width:100%;
+    background:rgba(0,0,0,.85);
+    padding:15px;text-align:center;
+    font-size:12px;border-top:1px solid rgba(0,255,255,.25);
+}
+
+/* MOBILE */
 @media(max-width:900px){
-  nav{position:fixed;top:70px;left:0;width:100%;height:calc(100vh - 70px);background:rgba(0,0,0,.96);display:none;flex-direction:column;justify-content:center;align-items:center;gap:30px;}
-  nav.active{display:flex;}
-  nav a{font-size:18px;}
-  .hamburger{display:flex;}
+    nav{
+        position:fixed;top:70px;left:0;
+        width:100%;height:calc(100vh - 70px);
+        background:rgba(0,0,0,.96);
+        display:none;flex-direction:column;
+        justify-content:center;align-items:center;gap:30px;
+    }
+    nav.active{display:flex;}
+    nav a{font-size:18px;}
+    .hamburger{display:flex;}
 }
 </style>
 </head>
@@ -45,23 +123,23 @@ footer{position:fixed;bottom:0;left:0;width:100%;background:rgba(0,0,0,.85);padd
 <body>
 
 <header>
-<h1>NmTeam</h1>
-<nav id="nav">
-  <a href="#gerar" onclick="toggleMenu()">Gerar Sensi</a>
-  <a href="#sobre" onclick="toggleMenu()">Quem Somos</a>
-  <a href="https://discord.gg/59Vs3XDu7x" target="_blank">Discord</a>
-</nav>
-<div class="hamburger" id="hamburger" onclick="toggleMenu()">
-  <span></span><span></span><span></span>
-</div>
+    <h1>NmTeam</h1>
+    <nav id="nav">
+        <a href="#gerar" onclick="toggleMenu()">Gerar Sensi</a>
+        <a href="#sobre" onclick="toggleMenu()">Quem Somos</a>
+        <a href="https://discord.gg/59Vs3XDu7x" target="_blank">Discord</a>
+    </nav>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+        <span></span><span></span><span></span>
+    </div>
 </header>
 
 <section class="hero">
-<h2>Gerador de Sensibilidade Free</h2>
-<p>IA de sensibilidade baseada no seu aparelho e na sua tela.</p>
-<button onclick="document.getElementById('gerar').scrollIntoView({behavior:'smooth'})">
-  GERAR SENSI
-</button>
+    <h2>Melhore sua mira no Free Fire</h2>
+    <p>IA de sensibilidade baseada no seu aparelho e na sua tela.</p>
+    <button onclick="document.getElementById('gerar').scrollIntoView({behavior:'smooth'})">
+        GERAR SENSI
+    </button>
 </section>
 
 <section id="gerar">
@@ -117,54 +195,54 @@ const presets={
 
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 
-// ✅ Detecção de aparelho confiável
 function getDeviceName(){
-  const ua = navigator.userAgent.toLowerCase();
-  if(/iphone/.test(ua)) return "iPhone (iOS)";
-  if(/ipad/.test(ua)) return "iPad (iOS)";
-  if(/android/.test(ua)){
-    if(/samsung/.test(ua)) return "Samsung Android";
-    if(/xiaomi/.test(ua)) return "Xiaomi Android";
-    if(/motorola/.test(ua)) return "Motorola Android";
-    if(/huawei/.test(ua)) return "Huawei Android";
-    if(/oppo/.test(ua)) return "Oppo Android";
-    return "Android Genérico";
+  const ua=navigator.userAgent;
+  if(/iphone/i.test(ua)) return "iPhone (iOS)";
+  if(/ipad/i.test(ua)) return "iPad (iOS)";
+  if(/android/i.test(ua)){
+    const m=ua.match(/;\s([^;]+)\sBuild/i);
+    return m&&m[1]?m[1]:"Android";
   }
   return "Desconhecido";
 }
 
 function screenAI(){
-  const w=screen.width, h=screen.height, ratio=(h/w).toFixed(2);
+  const w=screen.width;
+  const h=screen.height;
+  const ratio=(h/w).toFixed(2);
   let adjust=0;
   if(w<=720) adjust-=4;
   if(w>=1080) adjust+=3;
   if(ratio>=2.0) adjust-=2;
-  return {adjust, info:`${w}x${h} • ${ratio}:1`};
+  return {adjust,info:`${w}x${h} • ${ratio}:1`};
 }
 
 function performanceAdjust(){
-  const ram = navigator.deviceMemory||4;
-  const cores = navigator.hardwareConcurrency||4;
+  const ram=navigator.deviceMemory||4;
+  const cores=navigator.hardwareConcurrency||4;
   if(ram<=3||cores<=4) return -4;
   if(ram<=6) return 0;
   return 3;
 }
 
 function generate(){
-  const p = document.getElementById("player").value;
-  if(!p){alert("Selecione um player"); return;}
-  let base = p==="custom"
+  const p=document.getElementById("player").value;
+  if(!p){alert("Selecione um player");return;}
+
+  let base=p==="custom"
     ? [rand(92,100),rand(88,95),rand(78,90),rand(68,80),rand(52,65),rand(62,75)]
     : [...presets[p]];
 
-  const tela = screenAI();
-  const totalAdjust = performanceAdjust() + tela.adjust;
-  base = base.map(v => Math.max(0, Math.min(100, v + totalAdjust)));
+  const totalAdjust=performanceAdjust()+screenAI().adjust;
+  base=base.map(v=>Math.max(0,Math.min(100,v+totalAdjust)));
 
-  ["g","r","m2","m4","a","o"].forEach((id,i)=>document.getElementById(id).innerText=base[i]);
+  ["g","r","m2","m4","a","o"]
+    .forEach((id,i)=>document.getElementById(id).innerText=base[i]);
 
-  document.getElementById("deviceInfo").innerText = "Sensi Recomendada: "+getDeviceName()+" • IA Ativa";
-  document.getElementById("screenInfo").innerText = tela.info;
+  document.getElementById("deviceInfo").innerText =
+    "Sensi Recomendada: "+getDeviceName()+" • IA Ativa";
+
+  document.getElementById("screenInfo").innerText=screenAI().info;
   document.getElementById("result").style.display="block";
 }
 
