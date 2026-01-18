@@ -2,264 +2,250 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Free Fire Sensi Generator - NmTeam</title>
+<title>NmTeam • Free Fire Sensibilidade</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 *{
+    margin:0;
+    padding:0;
     box-sizing:border-box;
     font-family:'Orbitron',sans-serif;
 }
 body{
-    margin:0;
-    min-height:100vh;
-    background:radial-gradient(circle at top,#0f2027,#000);
+    background:#050505;
+    color:#fff;
+    padding-bottom:80px;
+}
+
+/* HEADER */
+header{
     display:flex;
-    justify-content:center;
+    justify-content:space-between;
     align-items:center;
-    color:#fff;
+    padding:20px 60px;
+    background:rgba(0,0,0,.85);
+    border-bottom:1px solid rgba(0,255,255,.2);
 }
-.container{
-    width:500px;
-    background:linear-gradient(145deg,#0b0b0b,#141414);
-    border-radius:20px;
-    padding:22px;
-    box-shadow:0 0 40px rgba(0,255,255,.18);
-    border:1px solid rgba(0,255,255,.3);
-}
-h1{
-    text-align:center;
-    color:cyan;
-    text-shadow:0 0 15px cyan;
-    margin-bottom:5px;
-}
-.brand{
-    text-align:center;
-    font-size:12px;
-    color:#00ff9c;
-    margin-bottom:15px;
-    opacity:.9;
-}
-.tabs{
-    display:flex;
-    gap:6px;
-    margin-bottom:15px;
-}
-.tab{
-    flex:1;
-    padding:10px;
-    text-align:center;
-    cursor:pointer;
-    border-radius:12px;
-    background:#0e0e0e;
-    border:1px solid rgba(0,255,255,.25);
-    font-size:11px;
-}
-.tab.active{
-    background:linear-gradient(90deg,cyan,#00ff9c);
-    color:#000;
-    font-weight:700;
-}
-.content{
-    display:none;
-}
-.content.active{
-    display:block;
-}
-select,button{
-    width:100%;
-    padding:13px;
-    border-radius:12px;
-    background:#0e0e0e;
-    border:1px solid rgba(0,255,255,.3);
-    color:#fff;
-    margin-bottom:14px;
-}
-button{
-    background:linear-gradient(90deg,cyan,#00ff9c);
-    color:#000;
-    font-weight:700;
-    cursor:pointer;
-}
-button:hover{
-    box-shadow:0 0 18px cyan;
-}
-.result{
-    background:rgba(0,0,0,.6);
-    padding:14px;
-    border-radius:14px;
-    border:1px solid rgba(0,255,255,.2);
-}
-.result p{
-    margin:6px 0;
+header h1{color:cyan;font-size:22px;}
+nav a{
+    color:#ccc;
+    margin-left:25px;
+    text-decoration:none;
     font-size:13px;
 }
-.tip{
-    background:rgba(0,255,255,.08);
-    border-left:3px solid cyan;
-    padding:12px;
+nav a:hover{color:cyan;}
+
+/* HERO */
+.hero{
+    padding:90px 60px;
+    background:radial-gradient(circle at top,#0f2027,#000);
+}
+.hero h2{font-size:42px;color:cyan;margin-bottom:15px;}
+.hero p{max-width:600px;font-size:14px;opacity:.8;margin-bottom:30px;}
+.hero button{
+    padding:15px 30px;
+    border:none;
     border-radius:10px;
-    font-size:12px;
-    margin-bottom:12px;
+    background:linear-gradient(90deg,cyan,#00ff9c);
+    font-weight:700;
+    cursor:pointer;
 }
-.dev-box{
-    background:rgba(0,0,0,.6);
-    padding:15px;
-    border-radius:15px;
-    border:1px solid rgba(0,255,255,.25);
-    text-align:center;
-}
-.dev-box h3{
-    margin:0 0 10px 0;
-    color:cyan;
-    text-shadow:0 0 10px cyan;
-}
-.dev-box a{
-    display:inline-block;
-    margin-top:8px;
-    padding:10px 14px;
+.hero button:hover{box-shadow:0 0 20px cyan;}
+
+/* SECTIONS */
+section{padding:70px 60px;}
+section h3{color:cyan;font-size:26px;margin-bottom:25px;}
+
+/* GERADOR */
+.generator{max-width:420px;}
+select,button.gen{
+    width:100%;
+    padding:14px;
+    margin-bottom:15px;
     border-radius:10px;
-    background:linear-gradient(90deg,#5865F2,cyan);
+    background:#0e0e0e;
+    border:1px solid rgba(0,255,255,.3);
+    color:#fff;
+}
+button.gen{
+    background:linear-gradient(90deg,cyan,#00ff9c);
     color:#000;
-    text-decoration:none;
-    font-size:12px;
     font-weight:700;
 }
-.dev-box a:hover{
-    box-shadow:0 0 18px #5865F2;
+.result{
+    background:#0b0b0b;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid rgba(0,255,255,.2);
 }
-.footer{
+.result p{font-size:13px;margin:6px 0;}
+
+/* OTIMIZAÇÃO */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:25px;
+}
+.card{
+    background:#0b0b0b;
+    padding:20px;
+    border-radius:15px;
+    border:1px solid rgba(0,255,255,.2);
+}
+.card h4{color:cyan;margin-bottom:10px;}
+.card p{font-size:13px;opacity:.8;line-height:1.6;}
+
+/* FOOTER */
+footer{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:rgba(0,0,0,.85);
+    padding:15px;
     text-align:center;
-    margin-top:15px;
-    font-size:11px;
-    opacity:.6;
+    font-size:12px;
+    border-top:1px solid rgba(0,255,255,.25);
+    backdrop-filter: blur(6px);
+    z-index:999;
 }
-.footer span{
-    color:cyan;
-    font-weight:600;
-}
+footer span{color:cyan;font-weight:600;}
 </style>
 </head>
 
 <body>
-<div class="container">
 
-<h1>Sensibilidade Tool</h1>
-<div class="brand">NmTeam © Desde 2022</div>
+<header>
+    <h1>NmTeam</h1>
+    <nav>
+        <a href="#gerar">Gerar Sensi</a>
+        <a href="#opt">Otimização</a>
+        <a href="#sobre">Quem Somos</a>
+        <a href="https://discord.gg/59Vs3XDu7x" target="_blank">Discord</a>
+    </nav>
+</header>
 
-<div class="tabs">
-    <div class="tab active" onclick="openTab(0)">Gerar Sensi</div>
-    <div class="tab" onclick="openTab(1)">Android</div>
-    <div class="tab" onclick="openTab(2)">iOS</div>
-    <div class="tab" onclick="openTab(3)">Devs</div>
-    <div class="tab" onclick="openTab(4)">Quem Somos</div>
-</div>
+<section class="hero">
+    <h2>Melhore sua mira no Free Fire</h2>
+    <p>Sensibilidade inteligente baseada no desempenho do seu aparelho.</p>
+    <button onclick="document.getElementById('gerar').scrollIntoView({behavior:'smooth'})">
+        GERAR SENSI
+    </button>
+</section>
 
-<!-- GERAR SENSI -->
-<div class="content active">
-    <select id="player">
-        <option value="">Selecione um player</option>
-        <option value="nobru">Nobru</option>
-        <option value="cerol">Cerol</option>
-        <option value="bak">Bak</option>
-        <option value="fluxo">Fluxo Pro</option>
-        <option value="custom">Custom NmTeam</option>
-    </select>
+<section id="gerar">
+<h3>Gerador de Sensibilidade</h3>
 
-    <button onclick="generate()">GERAR SENSI</button>
+<div class="generator">
 
-    <div class="result" id="result" style="display:none;">
-        <p><b>🔥 Preset NmTeam</b></p>
-        <p>🔫 Geral: <span id="g"></span></p>
-        <p>🎯 Red Dot: <span id="r"></span></p>
-        <p>📍 Mira 2x: <span id="m2"></span></p>
-        <p>📍 Mira 4x: <span id="m4"></span></p>
-        <p>🔭 AWM: <span id="a"></span></p>
-        <p>👁️ Olhadinha: <span id="o"></span></p>
-    </div>
-</div>
+<select id="player">
+<option value="">Player / Base</option>
+<option value="nobru">Nobru</option>
+<option value="cerol">Cerol</option>
+<option value="bak">Bak</option>
+<option value="fluxo">Fluxo Pro</option>
+<option value="custom">Custom NmTeam</option>
+</select>
 
-<!-- ANDROID -->
-<div class="content">
-    <div class="tip">
-        📱 <b>Otimização Android</b><br><br>
-        • Modo desenvolvedor ativado<br>
-        • Escalas de animação: <b>0.5x</b><br>
-        • DPI ideal: <b>390–420</b><br>
-        • Apps em segundo plano fechados
-    </div>
-</div>
+<button class="gen" onclick="generate()">Gerar Sensibilidade</button>
 
-<!-- IOS -->
-<div class="content">
-    <div class="tip">
-        🍎 <b>Otimização iOS</b><br><br>
-        • Reduzir Movimento ativado<br>
-        • Pouca Energia desativado<br>
-        • Brilho manual (60–80%)
-    </div>
-</div>
-
-<!-- DEVS -->
-<div class="content">
-    <div class="dev-box">
-        <h3>Equipe de Desenvolvimento</h3>
-        <p><b>NmTeam</b></p>
-        <p>Developer principal: Don John</p>
-        <a href="https://discord.gg/59Vs3XDu7x" target="_blank">
-            Discord Oficial
-        </a>
-    </div>
-</div>
-
-<!-- QUEM SOMOS -->
-<div class="content">
-    <div class="tip">
-        🧠 <b>Quem Somos</b><br><br>
-        A <b>NmTeam</b> é uma equipe criada em <b>2022</b>, focada em performance,
-       contendo diversos produtos para aprimorar sua jogabilidade no Free Fire.<br><br>
-        Nosso objetivo é entregar configurações testadas, estáveis e focadas
-        em melhorar a mira, resposta e consistência do jogador.
-    </div>
-</div>
-
-<div class="footer">
-    Desenvolvido por <span>NmTeam • By : Nyckson And Don John</span>
+<div class="result" id="result" style="display:none;">
+<p><b id="deviceInfo"></b></p>
+<p>🔫 Geral: <span id="g"></span></p>
+<p>🎯 Red Dot: <span id="r"></span></p>
+<p>📍 Mira 2x: <span id="m2"></span></p>
+<p>📍 Mira 4x: <span id="m4"></span></p>
+<p>🔭 AWM: <span id="a"></span></p>
+<p>👁️ Olhadinha: <span id="o"></span></p>
 </div>
 
 </div>
+</section>
+
+<section id="opt">
+<h3>Otimização</h3>
+<div class="cards">
+<div class="card">
+<h4>Android</h4>
+<p>DPI 390–420<br>Animações 0.5x<br>Modo desempenho ativo</p>
+</div>
+<div class="card">
+<h4>iOS</h4>
+<p>Reduzir movimento<br>Brilho manual<br>Pouca energia OFF</p>
+</div>
+</div>
+</section>
+
+<section id="sobre">
+<h3>Quem Somos</h3>
+<p style="max-width:700px;opacity:.8">
+NmTeam criada em 2022 focada em performance e precisão competitiva.
+</p>
+</section>
+
+<footer>
+© 2022–2026 <span>NmTeam</span> • By Nyckson & Don John
+</footer>
 
 <script>
 const presets={
-    nobru:[95,90,80,70,55,65],
-    cerol:[100,92,85,75,60,70],
-    bak:[98,88,78,68,52,63],
-    fluxo:[97,91,82,72,58,68]
+  nobru:[95,90,80,70,55,65],
+  cerol:[100,92,85,75,60,70],
+  bak:[98,88,78,68,52,63],
+  fluxo:[97,91,82,72,58,68]
 };
+
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
-function generate(){
-    let p=document.getElementById("player").value;
-    let v;
-    if(p==="custom"){
-        v=[rand(92,100),rand(88,95),rand(78,90),rand(68,80),rand(52,65),rand(62,75)];
-    }else if(presets[p]){
-        v=presets[p];
-    }else{
-        alert("Selecione um player");
-        return;
-    }
-    ["g","r","m2","m4","a","o"].forEach((id,i)=>{
-        document.getElementById(id).innerText=v[i];
-    });
-    document.getElementById("result").style.display="block";
+
+// DETECÇÃO INTELIGENTE
+function detectDevice(){
+  const ua=navigator.userAgent.toLowerCase();
+  const ram=navigator.deviceMemory||4;
+  const cores=navigator.hardwareConcurrency||4;
+
+  if(ua.includes("iphone")||ua.includes("ipad")){
+    return {label:"iPhone (iOS)",adjust:5};
+  }
+  if(ram<=3||cores<=4){
+    return {label:"Android Fraco",adjust:-6};
+  }
+  if(ram<=6){
+    return {label:"Android Médio",adjust:0};
+  }
+  return {label:"Android Top",adjust:4};
 }
-function openTab(i){
-    document.querySelectorAll(".tab").forEach((t,idx)=>{
-        t.classList.toggle("active",idx===i);
-    });
-    document.querySelectorAll(".content").forEach((c,idx)=>{
-        c.classList.toggle("active",idx===i);
-    });
+
+function generate(){
+  const p=document.getElementById("player").value;
+  if(!p){alert("Selecione um player/base");return;}
+
+  let base;
+  if(p==="custom"){
+    base=[
+      rand(92,100),
+      rand(88,95),
+      rand(78,90),
+      rand(68,80),
+      rand(52,65),
+      rand(62,75)
+    ];
+  }else{
+    base=[...presets[p]];
+  }
+
+  const device=detectDevice();
+  base=base.map(v=>Math.max(0,Math.min(100,v+device.adjust)));
+
+  ["g","r","m2","m4","a","o"].forEach((id,i)=>{
+    document.getElementById(id).innerText=base[i];
+  });
+
+  document.getElementById("deviceInfo").innerText=
+    "📱 Ótima pro seu Aparelho: "+device.label;
+
+  document.getElementById("result").style.display="block";
 }
 </script>
 
