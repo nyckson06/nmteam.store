@@ -1,212 +1,267 @@
-<!doctypehtml><html lang="pt-BR"><meta charset="UTF-8"><meta content="width=device-width,initial-scale=1"name="viewport"><title>nyckson.store</title><script type="module">import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-    import { getDatabase, ref, set, onValue, get, remove, update } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Free Fire Sensi Generator - NmTeam</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDa6B3ZD_rm-CoBjECunyPD38uXNOoV5dU",
-      authDomain: "loja-c0b11.firebaseapp.com",
-      databaseURL: "https://loja-c0b11-default-rtdb.firebaseio.com",
-      projectId: "loja-c0b11",
-      storageBucket: "loja-c0b11.firebasestorage.app",
-      messagingSenderId: "778931385122",
-      appId: "1:778931385122:android:feb91e3f6f1e72fe486b7b"
-    };
+<style>
+*{
+    box-sizing:border-box;
+    font-family:'Orbitron',sans-serif;
+}
+body{
+    margin:0;
+    min-height:100vh;
+    background:radial-gradient(circle at top,#0f2027,#000);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#fff;
+}
+.container{
+    width:500px;
+    background:linear-gradient(145deg,#0b0b0b,#141414);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 0 40px rgba(0,255,255,.18);
+    border:1px solid rgba(0,255,255,.3);
+}
+h1{
+    text-align:center;
+    color:cyan;
+    text-shadow:0 0 15px cyan;
+    margin-bottom:5px;
+}
+.brand{
+    text-align:center;
+    font-size:12px;
+    color:#00ff9c;
+    margin-bottom:15px;
+    opacity:.9;
+}
+.tabs{
+    display:flex;
+    gap:6px;
+    margin-bottom:15px;
+}
+.tab{
+    flex:1;
+    padding:10px;
+    text-align:center;
+    cursor:pointer;
+    border-radius:12px;
+    background:#0e0e0e;
+    border:1px solid rgba(0,255,255,.25);
+    font-size:11px;
+}
+.tab.active{
+    background:linear-gradient(90deg,cyan,#00ff9c);
+    color:#000;
+    font-weight:700;
+}
+.content{
+    display:none;
+}
+.content.active{
+    display:block;
+}
+select,button{
+    width:100%;
+    padding:13px;
+    border-radius:12px;
+    background:#0e0e0e;
+    border:1px solid rgba(0,255,255,.3);
+    color:#fff;
+    margin-bottom:14px;
+}
+button{
+    background:linear-gradient(90deg,cyan,#00ff9c);
+    color:#000;
+    font-weight:700;
+    cursor:pointer;
+}
+button:hover{
+    box-shadow:0 0 18px cyan;
+}
+.result{
+    background:rgba(0,0,0,.6);
+    padding:14px;
+    border-radius:14px;
+    border:1px solid rgba(0,255,255,.2);
+}
+.result p{
+    margin:6px 0;
+    font-size:13px;
+}
+.tip{
+    background:rgba(0,255,255,.08);
+    border-left:3px solid cyan;
+    padding:12px;
+    border-radius:10px;
+    font-size:12px;
+    margin-bottom:12px;
+}
+.dev-box{
+    background:rgba(0,0,0,.6);
+    padding:15px;
+    border-radius:15px;
+    border:1px solid rgba(0,255,255,.25);
+    text-align:center;
+}
+.dev-box h3{
+    margin:0 0 10px 0;
+    color:cyan;
+    text-shadow:0 0 10px cyan;
+}
+.dev-box a{
+    display:inline-block;
+    margin-top:8px;
+    padding:10px 14px;
+    border-radius:10px;
+    background:linear-gradient(90deg,#5865F2,cyan);
+    color:#000;
+    text-decoration:none;
+    font-size:12px;
+    font-weight:700;
+}
+.dev-box a:hover{
+    box-shadow:0 0 18px #5865F2;
+}
+.footer{
+    text-align:center;
+    margin-top:15px;
+    font-size:11px;
+    opacity:.6;
+}
+.footer span{
+    color:cyan;
+    font-weight:600;
+}
+</style>
+</head>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    setPersistence(auth, browserLocalPersistence);
-    const db = getDatabase(app);
+<body>
+<div class="container">
 
-    const productGrid = document.getElementById("productGrid");
-    const adminPanel = document.getElementById("adminPanel");
-    const adminToggle = document.getElementById("adminToggle");
+<h1>Sensibilidade Tool</h1>
+<div class="brand">NmTeam © Desde 2022</div>
 
-    let currentUser = null;
-    let currentCargo = "visitante";
+<div class="tabs">
+    <div class="tab active" onclick="openTab(0)">Gerar Sensi</div>
+    <div class="tab" onclick="openTab(1)">Android</div>
+    <div class="tab" onclick="openTab(2)">iOS</div>
+    <div class="tab" onclick="openTab(3)">Devs</div>
+    <div class="tab" onclick="openTab(4)">Quem Somos</div>
+</div>
 
-    function carregarProdutos(categoriaSelecionada = null) {
-      onValue(ref(db, "produtos"), (snapshot) => {
-        productGrid.innerHTML = "";
-        snapshot.forEach(prodSnap => {
-          const produto = prodSnap.val();
-          const id = prodSnap.key;
+<!-- GERAR SENSI -->
+<div class="content active">
+    <select id="player">
+        <option value="">Selecione um player</option>
+        <option value="nobru">Nobru</option>
+        <option value="cerol">Cerol</option>
+        <option value="bak">Bak</option>
+        <option value="fluxo">Fluxo Pro</option>
+        <option value="custom">Custom NmTeam</option>
+    </select>
 
-          if (categoriaSelecionada && produto.categoria !== categoriaSelecionada) return;
+    <button onclick="generate()">GERAR SENSI</button>
 
-          const card = document.createElement("div");
-          card.className = "prod-card";
-          card.innerHTML = `
-            <img src="${produto.imagem}" alt="${produto.nome}" />
-            <div class="prod-info">
-              <h3>${produto.nome}</h3>
-              <p class="preco">R$ ${produto.preco}</p>
-              <a href="${produto.link}" target="_blank" class="btn-comprar">Comprar</a>
-              ${currentCargo === "admin" ? `
-                <div class="admin-controls">
-                  <button onclick="editarProduto('${id}', '${produto.nome}', '${produto.preco}', '${produto.imagem}', '${produto.link}', '${produto.categoria}')">Editar</button>
-                  <button onclick="removerProduto('${id}')">Remover</button>
-                </div>
-              ` : ""}
-            </div>
-          `;
-          productGrid.appendChild(card);
-        });
-      });
+    <div class="result" id="result" style="display:none;">
+        <p><b>🔥 Preset NmTeam</b></p>
+        <p>🔫 Geral: <span id="g"></span></p>
+        <p>🎯 Red Dot: <span id="r"></span></p>
+        <p>📍 Mira 2x: <span id="m2"></span></p>
+        <p>📍 Mira 4x: <span id="m4"></span></p>
+        <p>🔭 AWM: <span id="a"></span></p>
+        <p>👁️ Olhadinha: <span id="o"></span></p>
+    </div>
+</div>
+
+<!-- ANDROID -->
+<div class="content">
+    <div class="tip">
+        📱 <b>Otimização Android</b><br><br>
+        • Modo desenvolvedor ativado<br>
+        • Escalas de animação: <b>0.5x</b><br>
+        • DPI ideal: <b>390–420</b><br>
+        • Apps em segundo plano fechados
+    </div>
+</div>
+
+<!-- IOS -->
+<div class="content">
+    <div class="tip">
+        🍎 <b>Otimização iOS</b><br><br>
+        • Reduzir Movimento ativado<br>
+        • Pouca Energia desativado<br>
+        • Brilho manual (60–80%)
+    </div>
+</div>
+
+<!-- DEVS -->
+<div class="content">
+    <div class="dev-box">
+        <h3>Equipe de Desenvolvimento</h3>
+        <p><b>NmTeam</b></p>
+        <p>Developer principal: Don John</p>
+        <a href="https://discord.gg/59Vs3XDu7x" target="_blank">
+            Discord Oficial
+        </a>
+    </div>
+</div>
+
+<!-- QUEM SOMOS -->
+<div class="content">
+    <div class="tip">
+        🧠 <b>Quem Somos</b><br><br>
+        A <b>NmTeam</b> é uma equipe criada em <b>2022</b>, focada em performance,
+       contendo diversos produtos para aprimorar sua jogabilidade no Free Fire.<br><br>
+        Nosso objetivo é entregar configurações testadas, estáveis e focadas
+        em melhorar a mira, resposta e consistência do jogador.
+    </div>
+</div>
+
+<div class="footer">
+    Desenvolvido por <span>NmTeam • By : Nyckson And Don John</span>
+</div>
+
+</div>
+
+<script>
+const presets={
+    nobru:[95,90,80,70,55,65],
+    cerol:[100,92,85,75,60,70],
+    bak:[98,88,78,68,52,63],
+    fluxo:[97,91,82,72,58,68]
+};
+function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
+function generate(){
+    let p=document.getElementById("player").value;
+    let v;
+    if(p==="custom"){
+        v=[rand(92,100),rand(88,95),rand(78,90),rand(68,80),rand(52,65),rand(62,75)];
+    }else if(presets[p]){
+        v=presets[p];
+    }else{
+        alert("Selecione um player");
+        return;
     }
-
-    window.filtrar = (categ) => {
-      carregarProdutos(categ);
-      document.getElementById("listaCategorias").style.display = "none";
-    };
-
-    window.atualizarMenuAuth = () => {
-      const authDiv = document.getElementById("menuAuth");
-      if (!authDiv) return;
-      if (currentUser) {
-        authDiv.innerHTML = `<button onclick="logout()">Sair</button>`;
-      } else {
-        authDiv.innerHTML = `
-          <button onclick="document.getElementById('loginForm').style.display='block'">Login</button>
-          <button onclick="document.getElementById('registerForm').style.display='block'">Cadastro</button>
-        `;
-      }
-    };
-
-    window.login = async () => {
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
-      try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        currentUser = userCredential.user;
-        const snap = await get(ref(db, "users/" + currentUser.uid));
-        if (snap.exists()) currentCargo = snap.val().cargo || "usuário";
-        
-        if (currentCargo === "admin") {
-          adminToggle.style.display = "block";
-        }
-
-        document.getElementById("loginForm").style.display = "none";
-        atualizarMenuAuth();
-      } catch (err) {
-        alert("Erro no login: " + err.message);
-      }
-    };
-
-    window.register = async () => {
-      const nome = document.getElementById("regNome").value;
-      const email = document.getElementById("regEmail").value;
-      const password = document.getElementById("regPassword").value;
-      try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = userCredential.user.uid;
-        await set(ref(db, "users/" + uid), { nome, email, cargo: "usuário" });
-        alert("Cadastro feito! Agora faça login.");
-        document.getElementById("registerForm").style.display = "none";
-        document.getElementById("loginForm").style.display = "block";
-      } catch (err) {
-        alert("Erro no cadastro: " + err.message);
-      }
-    };
-
-    window.adicionarProduto = async () => {
-      const nome = document.getElementById("nomeProduto").value;
-      const preco = document.getElementById("precoProduto").value;
-      const imagem = document.getElementById("imagemProduto").value;
-      const link = document.getElementById("linkProduto").value;
-      const categoria = document.getElementById("categoriaProduto").value;
-      if (!nome || !preco || !imagem || !link || !categoria) return alert("Preencha todos os campos.");
-      const id = Date.now().toString();
-      await set(ref(db, "produtos/" + id), { nome, preco, imagem, link, categoria });
-      alert("Produto publicado!");
-      limparCampos();
-      carregarProdutos();
-    };
-
-    window.editarProduto = (id, nome, preco, imagem, link, categoria) => {
-      document.getElementById("nomeProduto").value = nome;
-      document.getElementById("precoProduto").value = preco;
-      document.getElementById("imagemProduto").value = imagem;
-      document.getElementById("linkProduto").value = link;
-      document.getElementById("categoriaProduto").value = categoria;
-      document.getElementById("btnAdicionar").style.display = "none";
-      document.getElementById("btnSalvarEdicao").style.display = "inline-block";
-      window.produtoEditando = id;
-      adminPanel.style.display = "block";
-    };
-
-    window.salvarEdicao = async () => {
-      if (!window.produtoEditando) return;
-      const nome = document.getElementById("nomeProduto").value;
-      const preco = document.getElementById("precoProduto").value;
-      const imagem = document.getElementById("imagemProduto").value;
-      const link = document.getElementById("linkProduto").value;
-      const categoria = document.getElementById("categoriaProduto").value;
-      await update(ref(db, "produtos/" + window.produtoEditando), { nome, preco, imagem, link, categoria });
-      alert("Produto atualizado!");
-      window.produtoEditando = null;
-      document.getElementById("btnAdicionar").style.display = "inline-block";
-      document.getElementById("btnSalvarEdicao").style.display = "none";
-      limparCampos();
-      carregarProdutos();
-    };
-
-    window.removerProduto = async (id) => {
-      if (confirm("Tem certeza?")) {
-        await remove(ref(db, "produtos/" + id));
-        alert("Produto removido");
-        carregarProdutos();
-      }
-    };
-
-    function limparCampos() {
-      document.getElementById("nomeProduto").value = "";
-      document.getElementById("precoProduto").value = "";
-      document.getElementById("imagemProduto").value = "";
-      document.getElementById("linkProduto").value = "";
-      document.getElementById("categoriaProduto").value = "";
-    }
-
-    window.logout = async () => {
-      await signOut(auth);
-      currentUser = null;
-      currentCargo = "visitante";
-      adminPanel.style.display = "none";
-      adminToggle.style.display = "none";
-      carregarProdutos();
-      atualizarMenuAuth();
-    };
-
-    document.getElementById("btnToggleAdmin").addEventListener("click", () => {
-      adminPanel.style.display = (adminPanel.style.display === "none" || adminPanel.style.display === "") ? "block" : "none";
+    ["g","r","m2","m4","a","o"].forEach((id,i)=>{
+        document.getElementById(id).innerText=v[i];
     });
+    document.getElementById("result").style.display="block";
+}
+function openTab(i){
+    document.querySelectorAll(".tab").forEach((t,idx)=>{
+        t.classList.toggle("active",idx===i);
+    });
+    document.querySelectorAll(".content").forEach((c,idx)=>{
+        c.classList.toggle("active",idx===i);
+    });
+}
+</script>
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        currentUser = user;
-        const snap = await get(ref(db, "users/" + currentUser.uid));
-        if (snap.exists()) currentCargo = snap.val().cargo || "usuário";
-        if (currentCargo === "admin") {
-          adminToggle.style.display = "block";
-        }
-        atualizarMenuAuth();
-      } else {
-        currentUser = null;
-        currentCargo = "visitante";
-        adminToggle.style.display = "none";
-        atualizarMenuAuth();
-      }
-      carregarProdutos();
-    });</script><style>body{margin:0;font-family:Arial,sans-serif;background:#111;color:#fff;overflow-x:hidden}.titulo{color:red;text-align:center;font-size:42px;font-weight:700;text-shadow:0 0 10px red,0 0 20px #900}.topbar{display:flex;align-items:center;justify-content:center;margin:20px 0;position:relative;z-index:3;flex-direction:column}.topbar img{height:80px;margin-bottom:5px}#btnCategorias{position:absolute;left:20px;background:red;color:#000;border:none;font-size:22px;padding:6px 12px;border-radius:5px;cursor:pointer;box-shadow:0 0 8px red}#btnCategorias:hover{background:#900;color:#fff}#listaCategorias{display:none;position:absolute;top:70px;left:20px;background:#1a1a1a;border:1px solid red;border-radius:8px;padding:8px;z-index:5}#listaCategorias button{display:block;width:100%;margin:4px 0;background:#222;color:red;border:none;padding:6px 10px;cursor:pointer;text-align:left;border-radius:5px}#listaCategorias button:hover{background:red;color:#000}.container{max-width:1200px;margin:auto;padding:20px;position:relative;z-index:2}.prod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}.prod-card{background:#1e1e1e;border-radius:10px;overflow:hidden;box-shadow:0 0 8px red;display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px;transition:transform .3s,box-shadow .3s;width:220px}.prod-card:hover{transform:scale(1.05);box-shadow:0 0 20px red,0 0 40px #900}.prod-card img{width:200px;height:200px;object-fit:contain;background:#000;border-radius:8px;margin-bottom:10px;display:block}.prod-card:hover img{transform:scale(1.1)}.prod-info{background:#111;padding:10px;width:100%;border-radius:8px}.prod-info h3{margin:0 0 6px;font-size:16px}.preco{color:red;font-weight:700;margin:6px 0;font-size:14px}.btn-comprar{display:inline-block;background:red;color:#000;padding:6px 10px;border-radius:5px;text-decoration:none;font-size:14px}.btn-comprar:hover{background:#900;color:#fff}.admin-controls{margin-top:8px}.admin-controls button{background:#666;border:none;padding:5px 8px;margin:2px;border-radius:4px;cursor:pointer;font-size:12px}.admin-controls button:hover{background:red;color:#fff}#adminPanel{display:none;background:#222;padding:15px;border:1px dashed red;border-radius:10px;margin-top:20px}#adminPanel input,#adminPanel select{width:100%;margin:5px 0;padding:8px;border-radius:5px;border:none}.auth-forms{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#222;padding:20px;border-radius:10px;z-index:1000;width:300px}.auth-forms input{width:100%;margin:8px 0;padding:8px;border:none;border-radius:5px}.auth-forms button{width:100%;padding:10px;background:red;border:none;color:#000;border-radius:5px;cursor:pointer}#adminToggle{display:none;position:fixed;bottom:20px;right:20px;z-index:999}#btnToggleAdmin{background:red;color:#000;font-size:24px;border:none;border-radius:50%;width:50px;height:50px;cursor:pointer;box-shadow:0 0 10px red}#btnToggleAdmin:hover{background:#900;color:#fff}#particles{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:0}footer{position:fixed;bottom:0;left:0;width:100%;background:#111;color:red;text-align:center;padding:10px;font-size:14px;border-top:1px solid red;z-index:1000}</style><canvas id="particles"></canvas><div class="topbar"><button id="btnCategorias">☰</button><div style="text-align:center"><img alt="NM TEAM Logo"src="logo.png"><h1 class="titulo">NmTeam.Store</h1></div></div><div id="listaCategorias"><button onclick="filtrar(null)">Todos</button> <button onclick='filtrar("Contas Freefire")'>Contas Freefire</button> <button onclick='filtrar("Projetos Cheats")'>Projetos Cheats</button> <button onclick='filtrar("Cheats Freefire")'>Cheats Freefire</button><hr><div id="menuAuth"></div></div><div class="container"><div id="productGrid"class="prod-grid"></div><div id="adminPanel"><h3>Gerenciar Produtos</h3><input id="nomeProduto"placeholder="Nome"> <input id="precoProduto"placeholder="Preço (R$)"> <input id="imagemProduto"placeholder="URL da imagem"> <input id="linkProduto"placeholder="Link de compra"> <select id="categoriaProduto"><option value="">Selecione a categoria<option value="Contas Freefire">Contas Freefire<option value="Projetos Cheats">Projetos Cheats<option value="Cheats Freefire">Cheats Freefire</select> <button onclick="adicionarProduto()"id="btnAdicionar">Adicionar Produto</button> <button onclick="salvarEdicao()"id="btnSalvarEdicao"style="display:none">Salvar Alteração</button></div></div><div id="adminToggle"><button id="btnToggleAdmin">+</button></div><div id="loginForm"class="auth-forms"><h2>Login</h2><input id="loginEmail"placeholder="Email"type="email"> <input id="loginPassword"placeholder="Senha"type="password"> <button onclick="login()">Entrar</button></div><div id="registerForm"class="auth-forms"><h2>Cadastro</h2><input id="regNome"placeholder="Nome"> <input id="regEmail"placeholder="Email"type="email"> <input id="regPassword"placeholder="Senha"type="password"> <button onclick="register()">Registrar</button></div><script>document.getElementById("btnCategorias").addEventListener("click", () => {
-      const lista = document.getElementById("listaCategorias");
-      lista.style.display = lista.style.display === "block" ? "none" : "block";
-    });</script><script>(function() {
-      const canvas=document.getElementById('particles');if(!canvas)return;
-      const ctx=canvas.getContext('2d');
-      function resize(){const dpr=window.devicePixelRatio||1;canvas.width=Math.floor(window.innerWidth*dpr);canvas.height=Math.floor(window.innerHeight*dpr);canvas.style.width=window.innerWidth+'px';canvas.style.height=window.innerHeight+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}window.addEventListener('resize',resize,{passive:true});resize();
-      const CONFIG={count:/Mobi|Android/i.test(navigator.userAgent)?30:60,minSize:1.5,maxSize:4.5,speed:0.3,connectDist:140};
-      const particles=[];for(let i=0;i<CONFIG.count;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()*2-1)*CONFIG.speed,vy:(Math.random()*2-1)*CONFIG.speed,size:CONFIG.minSize+Math.random()*(CONFIG.maxSize-CONFIG.minSize)});}
-      function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);for(let i=0;i<CONFIG.count;i++){const p=particles[i];ctx.beginPath();ctx.arc(p.x,p.y,p.size,0,2*Math.PI);ctx.fillStyle='rgba('+ (200+Math.floor(Math.random()*55))+','+(50+Math.floor(Math.random()*150))+','+(50+Math.floor(Math.random()*150))+',0.7)';ctx.fill();}
-      for(let i=0;i<CONFIG.count;i++){for(let j=i+1;j<CONFIG.count;j++){const a=particles[i],b=particles[j];const dx=a.x-b.x,dy=a.y-b.y;const dist=Math.sqrt(dx*dx+dy*dy);if(dist<CONFIG.connectDist){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.strokeStyle='rgba(255,0,0,'+(1-dist/CONFIG.connectDist)+')';ctx.stroke();}}}
-      for(let i=0;i<CONFIG.count;i++){const p=particles[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>canvas.width)p.vx*=-1;if(p.y<0||p.y>canvas.height)p.vy*=-1;}}
-      function animate(){draw();requestAnimationFrame(animate);}animate();
-    })();</script><footer>🔒 Selo de Garantia | 🚀Entrega Imediata | 💭Suporte Rápido | © 2025 NmTeam.Store — Todos os direitos reservados.</footer>
+</body>
+</html>
