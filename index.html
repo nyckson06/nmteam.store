@@ -8,12 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Orbitron',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
 body{
     background:#050505;
     color:#fff;
@@ -25,8 +20,7 @@ body{
 /* HEADER */
 header{
     position:fixed;
-    top:0;
-    left:0;
+    top:0;left:0;
     width:100%;
     display:flex;
     justify-content:space-between;
@@ -36,15 +30,10 @@ header{
     border-bottom:1px solid rgba(0,255,255,.25);
     z-index:1000;
 }
-header h1{
-    color:cyan;
-    font-size:22px;
-}
+header h1{color:cyan;font-size:22px;}
 
-/* NAV DESKTOP */
-nav{
-    display:flex;
-}
+/* NAV */
+nav{display:flex;}
 nav a{
     color:#ccc;
     margin-left:25px;
@@ -54,28 +43,14 @@ nav a{
 nav a:hover{color:cyan;}
 
 /* HAMBURGER */
-.hamburger{
-    display:none;
-    flex-direction:column;
-    gap:6px;
-    cursor:pointer;
-}
+.hamburger{display:none;flex-direction:column;gap:6px;cursor:pointer;}
 .hamburger span{
-    width:26px;
-    height:3px;
-    background:cyan;
-    border-radius:5px;
-    transition:.3s;
+    width:26px;height:3px;
+    background:cyan;border-radius:5px;transition:.3s;
 }
-.hamburger.active span:nth-child(1){
-    transform:rotate(45deg) translate(5px,5px);
-}
-.hamburger.active span:nth-child(2){
-    opacity:0;
-}
-.hamburger.active span:nth-child(3){
-    transform:rotate(-45deg) translate(6px,-6px);
-}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.hamburger.active span:nth-child(2){opacity:0;}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px);}
 
 /* HERO */
 .hero{
@@ -83,118 +58,64 @@ nav a:hover{color:cyan;}
     text-align:center;
     background:radial-gradient(circle at top,#0f2027,#000);
 }
-.hero h2{
-    font-size:36px;
-    color:cyan;
-    margin-bottom:15px;
-}
-.hero p{
-    max-width:600px;
-    margin:0 auto 30px;
-    font-size:14px;
-    opacity:.85;
-}
+.hero h2{font-size:36px;color:cyan;margin-bottom:15px;}
+.hero p{max-width:600px;margin:0 auto 30px;font-size:14px;opacity:.85;}
 .hero button{
-    padding:16px 35px;
-    border:none;
-    border-radius:12px;
+    padding:16px 35px;border:none;border-radius:12px;
     background:linear-gradient(90deg,cyan,#00ff9c);
-    font-weight:700;
-    cursor:pointer;
+    font-weight:700;cursor:pointer;
 }
-.hero button:hover{box-shadow:0 0 20px cyan;}
 
 /* SECTIONS */
-section{
-    padding:70px 25px;
-}
-section h3{
-    color:cyan;
-    font-size:26px;
-    margin-bottom:25px;
-}
+section{padding:70px 25px;}
+section h3{color:cyan;font-size:26px;margin-bottom:25px;}
 
 /* GERADOR */
-.generator{
-    max-width:420px;
-    margin:auto;
-}
+.generator{max-width:420px;margin:auto;}
 select,button.gen{
-    width:100%;
-    padding:14px;
-    margin-bottom:15px;
-    border-radius:10px;
-    background:#0e0e0e;
-    border:1px solid rgba(0,255,255,.3);
-    color:#fff;
+    width:100%;padding:14px;margin-bottom:15px;
+    border-radius:10px;background:#0e0e0e;
+    border:1px solid rgba(0,255,255,.3);color:#fff;
 }
 button.gen{
     background:linear-gradient(90deg,cyan,#00ff9c);
-    color:#000;
-    font-weight:700;
+    color:#000;font-weight:700;
 }
 .result{
-    background:#0b0b0b;
-    padding:15px;
-    border-radius:12px;
+    background:#0b0b0b;padding:15px;border-radius:12px;
     border:1px solid rgba(0,255,255,.2);
 }
 .result p{font-size:13px;margin:6px 0;}
 
-/* OTIMIZAÇÃO */
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-    gap:25px;
+/* QUEM SOMOS */
+.about{
+    max-width:700px;
+    margin:auto;
+    opacity:.85;
+    line-height:1.7;
+    font-size:14px;
 }
-.card{
-    background:#0b0b0b;
-    padding:20px;
-    border-radius:15px;
-    border:1px solid rgba(0,255,255,.2);
-}
-.card h4{color:cyan;margin-bottom:10px;}
-.card p{font-size:13px;opacity:.8;line-height:1.6;}
 
 /* FOOTER */
 footer{
-    position:fixed;
-    bottom:0;
-    left:0;
-    width:100%;
+    position:fixed;bottom:0;left:0;width:100%;
     background:rgba(0,0,0,.85);
-    padding:15px;
-    text-align:center;
-    font-size:12px;
-    border-top:1px solid rgba(0,255,255,.25);
-    backdrop-filter: blur(6px);
-    z-index:999;
+    padding:15px;text-align:center;
+    font-size:12px;border-top:1px solid rgba(0,255,255,.25);
 }
-footer span{color:cyan;font-weight:600;}
 
 /* MOBILE */
 @media(max-width:900px){
     nav{
-        position:fixed;
-        top:70px;
-        left:0;
-        width:100%;
-        height:calc(100vh - 70px);
+        position:fixed;top:70px;left:0;
+        width:100%;height:calc(100vh - 70px);
         background:rgba(0,0,0,.96);
-        display:none;
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        gap:30px;
-        backdrop-filter:blur(8px);
+        display:none;flex-direction:column;
+        justify-content:center;align-items:center;gap:30px;
     }
     nav.active{display:flex;}
     nav a{font-size:18px;}
     .hamburger{display:flex;}
-}
-@media(max-width:480px){
-    .hero h2{font-size:26px;}
-    section h3{font-size:22px;}
 }
 </style>
 </head>
@@ -205,7 +126,6 @@ footer span{color:cyan;font-weight:600;}
     <h1>NmTeam</h1>
     <nav id="nav">
         <a href="#gerar" onclick="toggleMenu()">Gerar Sensi</a>
-        <a href="#opt" onclick="toggleMenu()">Otimização</a>
         <a href="#sobre" onclick="toggleMenu()">Quem Somos</a>
         <a href="https://discord.gg/59Vs3XDu7x" target="_blank">Discord</a>
     </nav>
@@ -215,8 +135,8 @@ footer span{color:cyan;font-weight:600;}
 </header>
 
 <section class="hero">
-    <h2>Melhore sua mira no Free Fire</h2>
-    <p>Sensibilidade inteligente baseada no desempenho do seu aparelho.</p>
+    <h2>Gerador de Sensibilidade Frer</h2>
+    <p>IA de sensibilidade baseada no seu aparelho e na sua tela.</p>
     <button onclick="document.getElementById('gerar').scrollIntoView({behavior:'smooth'})">
         GERAR SENSI
     </button>
@@ -238,7 +158,8 @@ footer span{color:cyan;font-weight:600;}
 <button class="gen" onclick="generate()">Gerar Sensibilidade</button>
 
 <div class="result" id="result" style="display:none;">
-<p><b id="deviceInfo"></b></p>
+<p><b id="deviceInfo" style="color:cyan;"></b></p>
+<p>📱 Tela: <span id="screenInfo"></span></p>
 <p>🔫 Geral: <span id="g"></span></p>
 <p>🎯 Red Dot: <span id="r"></span></p>
 <p>📍 Mira 2x: <span id="m2"></span></p>
@@ -249,29 +170,19 @@ footer span{color:cyan;font-weight:600;}
 </div>
 </section>
 
-<section id="opt">
-<h3>Otimização</h3>
-<div class="cards">
-<div class="card">
-<h4>Android</h4>
-<p>DPI 390–420<br>Animações 0.5x<br>Modo desempenho ativo</p>
-</div>
-<div class="card">
-<h4>iOS</h4>
-<p>Reduzir movimento<br>Brilho manual<br>Pouca energia OFF</p>
-</div>
-</div>
-</section>
-
 <section id="sobre">
 <h3>Quem Somos</h3>
-<p style="max-width:700px;opacity:.8">
-NmTeam criada em 2022 focada em performance e precisão competitiva.
-</p>
+<div class="about">
+NmTeam criada em 2022, focada em performance competitiva no Free Fire.
+Unimos análise de hardware, IA por tela e estudo de gameplay para gerar
+sensibilidades precisas, estáveis e adaptadas a cada jogador e dispositivo.
+<br><br>
+🎯 Nosso objetivo é simples: <b>mais capa, mais consistência e mais vitória.</b>
+</div>
 </section>
 
 <footer>
-© 2022–2026 <span>NmTeam</span> • By Nyckson & Don John
+© 2022–2026 <span style="color:cyan;">NmTeam</span> • By Nyckson & Don John
 </footer>
 
 <script>
@@ -284,26 +195,54 @@ const presets={
 
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 
-function detectDevice(){
-  const ua=navigator.userAgent.toLowerCase();
+function getDeviceName(){
+  const ua=navigator.userAgent;
+  if(/iphone/i.test(ua)) return "iPhone (iOS)";
+  if(/ipad/i.test(ua)) return "iPad (iOS)";
+  if(/android/i.test(ua)){
+    const m=ua.match(/;\s([^;]+)\sBuild/i);
+    return m&&m[1]?m[1]:"Android";
+  }
+  return "Desconhecido";
+}
+
+function screenAI(){
+  const w=screen.width;
+  const h=screen.height;
+  const ratio=(h/w).toFixed(2);
+  let adjust=0;
+  if(w<=720) adjust-=4;
+  if(w>=1080) adjust+=3;
+  if(ratio>=2.0) adjust-=2;
+  return {adjust,info:`${w}x${h} • ${ratio}:1`};
+}
+
+function performanceAdjust(){
   const ram=navigator.deviceMemory||4;
   const cores=navigator.hardwareConcurrency||4;
-  if(ua.includes("iphone")) return {label:"iPhone (iOS)",adjust:5};
-  if(ram<=3||cores<=4) return {label:"Android Fraco",adjust:-6};
-  if(ram<=6) return {label:"Android Médio",adjust:0};
-  return {label:"Android Top",adjust:4};
+  if(ram<=3||cores<=4) return -4;
+  if(ram<=6) return 0;
+  return 3;
 }
 
 function generate(){
   const p=document.getElementById("player").value;
   if(!p){alert("Selecione um player");return;}
+
   let base=p==="custom"
     ? [rand(92,100),rand(88,95),rand(78,90),rand(68,80),rand(52,65),rand(62,75)]
     : [...presets[p]];
-  const d=detectDevice();
-  base=base.map(v=>Math.max(0,Math.min(100,v+d.adjust)));
-  ["g","r","m2","m4","a","o"].forEach((id,i)=>document.getElementById(id).innerText=base[i]);
-  document.getElementById("deviceInfo").innerText="📱 Ideal pro seu Aparelho: "+d.label;
+
+  const totalAdjust=performanceAdjust()+screenAI().adjust;
+  base=base.map(v=>Math.max(0,Math.min(100,v+totalAdjust)));
+
+  ["g","r","m2","m4","a","o"]
+    .forEach((id,i)=>document.getElementById(id).innerText=base[i]);
+
+  document.getElementById("deviceInfo").innerText =
+    "Sensi Recomendada: "+getDeviceName()+" • IA Ativa";
+
+  document.getElementById("screenInfo").innerText=screenAI().info;
   document.getElementById("result").style.display="block";
 }
 
@@ -314,4 +253,4 @@ function toggleMenu(){
 </script>
 
 </body>
-</html>
+</html>https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap
