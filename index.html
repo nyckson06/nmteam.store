@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NmTeam • Free Fire Sensibilidade</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
@@ -27,8 +28,14 @@ header{
     padding:20px 60px;
     background:rgba(0,0,0,.85);
     border-bottom:1px solid rgba(0,255,255,.2);
+    position:relative;
 }
 header h1{color:cyan;font-size:22px;}
+
+/* NAV */
+nav{
+    display:flex;
+}
 nav a{
     color:#ccc;
     margin-left:25px;
@@ -36,6 +43,20 @@ nav a{
     font-size:13px;
 }
 nav a:hover{color:cyan;}
+
+/* HAMBURGER */
+.hamburger{
+    display:none;
+    flex-direction:column;
+    cursor:pointer;
+}
+.hamburger span{
+    width:25px;
+    height:3px;
+    background:cyan;
+    margin:4px 0;
+    transition:.4s;
+}
 
 /* HERO */
 .hero{
@@ -82,7 +103,7 @@ button.gen{
 }
 .result p{font-size:13px;margin:6px 0;}
 
-/* OTIMIZAÇÃO */
+/* CARDS */
 .cards{
     display:grid;
     grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -112,6 +133,44 @@ footer{
     z-index:999;
 }
 footer span{color:cyan;font-weight:600;}
+
+/* ================= MOBILE ================= */
+@media(max-width:900px){
+    header{
+        padding:15px 25px;
+    }
+    nav{
+        position:absolute;
+        top:100%;
+        left:0;
+        width:100%;
+        background:#050505;
+        flex-direction:column;
+        align-items:center;
+        display:none;
+        border-bottom:1px solid rgba(0,255,255,.2);
+    }
+    nav.active{
+        display:flex;
+    }
+    nav a{
+        margin:15px 0;
+        font-size:14px;
+    }
+    .hamburger{
+        display:flex;
+    }
+    .hero{
+        padding:70px 25px;
+        text-align:center;
+    }
+    .hero h2{
+        font-size:28px;
+    }
+    section{
+        padding:60px 25px;
+    }
+}
 </style>
 </head>
 
@@ -119,10 +178,17 @@ footer span{color:cyan;font-weight:600;}
 
 <header>
     <h1>NmTeam</h1>
-    <nav>
-        <a href="#gerar">Gerar Sensi</a>
-        <a href="#opt">Otimização</a>
-        <a href="#sobre">Quem Somos</a>
+
+    <div class="hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <nav id="nav">
+        <a href="#gerar" onclick="toggleMenu()">Gerar Sensi</a>
+        <a href="#opt" onclick="toggleMenu()">Otimização</a>
+        <a href="#sobre" onclick="toggleMenu()">Quem Somos</a>
         <a href="https://discord.gg/59Vs3XDu7x" target="_blank">Discord</a>
     </nav>
 </header>
@@ -139,7 +205,6 @@ footer span{color:cyan;font-weight:600;}
 <h3>Gerador de Sensibilidade</h3>
 
 <div class="generator">
-
 <select id="player">
 <option value="">Player / Base</option>
 <option value="nobru">Nobru</option>
@@ -160,7 +225,6 @@ footer span{color:cyan;font-weight:600;}
 <p>🔭 AWM: <span id="a"></span></p>
 <p>👁️ Olhadinha: <span id="o"></span></p>
 </div>
-
 </div>
 </section>
 
@@ -199,7 +263,6 @@ const presets={
 
 function rand(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 
-// DETECÇÃO INTELIGENTE
 function detectDevice(){
   const ua=navigator.userAgent.toLowerCase();
   const ram=navigator.deviceMemory||4;
@@ -221,19 +284,9 @@ function generate(){
   const p=document.getElementById("player").value;
   if(!p){alert("Selecione um player/base");return;}
 
-  let base;
-  if(p==="custom"){
-    base=[
-      rand(92,100),
-      rand(88,95),
-      rand(78,90),
-      rand(68,80),
-      rand(52,65),
-      rand(62,75)
-    ];
-  }else{
-    base=[...presets[p]];
-  }
+  let base=p==="custom"
+    ? [rand(92,100),rand(88,95),rand(78,90),rand(68,80),rand(52,65),rand(62,75)]
+    : [...presets[p]];
 
   const device=detectDevice();
   base=base.map(v=>Math.max(0,Math.min(100,v+device.adjust)));
@@ -246,6 +299,10 @@ function generate(){
     "📱 Ótima pro seu Aparelho: "+device.label;
 
   document.getElementById("result").style.display="block";
+}
+
+function toggleMenu(){
+  document.getElementById("nav").classList.toggle("active");
 }
 </script>
 
